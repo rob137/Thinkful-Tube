@@ -20,11 +20,12 @@ function fetchJsonAndLoadHtml(query) {
 	$.getJSON(query, function(json) {
 		let html = '';
 		for (let item in json.items) {
-		let videoId = json.items[item].id.videoId;
-		let videoTitle = json.items[item].snippet.title
-		console.log(videoId + videoTitle);
+		const videoTitle = json.items[item].snippet.title;
+		const videoThumbnail = json.items[item].snippet.thumbnails.medium.url; 
+		const videoId = json.items[item].id.videoId;
+		let videoUrl = 'https://www.youtube.com/' + videoId
 		html+= `<h3>${videoTitle}</h3>
-					<iframe width="640" height="390" src="https://www.youtube.com/embed/${videoId} frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe><br><br>`;
+					<a href="${videoUrl}"><img src="${videoThumbnail}""></img></a><br><br>`;
 	}
 	$(".js-search-results").html(html);	
 	});
