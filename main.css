@@ -1,0 +1,57 @@
+.hidden {
+	visibility: hidden;
+	transition: hidden 2s;
+}
+
+.lightbox-shade:before{
+  position: fixed;
+  content:"";
+  width: 100%;
+  height: 120%;
+  margin-top: -10%;
+  left:0;
+  z-index:-1;s
+}
+
+.lightbox-on:before {
+  transition: black 3s;
+	opacity: 0.9;	
+  background: black;
+}
+
+.lightbox-parent {
+  width: 100%; /* can be any width */
+  height: 200%; /* can be any height */
+  text-align: center;
+}
+ 
+/* pseudo element to force vertical centering of child element */
+.lightbox-parent:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+ 
+/* Centered child element can be any width and height */
+.lightbox {
+	width: 60vw;
+	height: 60vh;
+	position:fixed;
+  top: 20vh;
+  left: 20vw;
+}
+
+.close {
+	font-size: 2vh;
+	z-index: 1;
+	position:fixed;
+  top: 80.5vh;
+  left: 46.9vw;
+  background-color: white;
+  padding: 0 5px 0 5px;
+}
+
+.opaque {
+	opacity: 0.1;
+}
