@@ -1,7 +1,8 @@
 'use strict'
 function handleSearchFormSubmission() { 
 	console.log('handleSearchFormSubmission() ran.');
-	$("form").submit(event, function() {
+	$("form").submit(event, function(event) {
+		event.preventDefault();
 		const query = prepareQuery();
 		fetchJsonAndLoadHtml(query);	
 	});
