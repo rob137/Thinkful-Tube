@@ -23,7 +23,7 @@ function fetchJsonAndLoadHtml(query) {
 		const videoTitle = json.items[item].snippet.title;
 		const videoThumbnail = json.items[item].snippet.thumbnails.medium.url; 
 		const videoId = json.items[item].id.videoId;
-		let videoUrl = 'https://www.youtube.com/' + videoId
+		let videoUrl = 'https://www.youtube.com/watch/' + videoId;
 		html+= `<h3>${videoTitle}</h3>
 					<a href="${videoUrl}"><img src="${videoThumbnail}""></img></a><br><br>`;
 	}
