@@ -1,12 +1,24 @@
-const queryWithoutSearchTerm = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyAwrO9kTCuS6Zimy4p4zCZMa-UUsgJ_7OU&q=';
 
 function handleSearchFormSubmission() { 
-	$("form").submit(event, function() {
+	query = prepareQuery();
+	requestVideos(query);
 
-	});
-		
 }
 
-$.getJSON('/path/to/file', {param1: 'value1'}, function(json, textStatus) {
-		/*optional stuff to do after success */
-});	
+function prepareQuery() {
+	$("form").submit(event, function() {
+		const queryWithoutSearchTerms = 'https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyAwrO9kTCuS6Zimy4p4zCZMa-UUsgJ_7OU&q=';
+		const querySearchTerms = $(".js-query").val(); 
+		const queryFinal = queryWithoutSearchTerms + querySearchTerms;
+		return queryFinal;
+	});
+
+}
+
+function requestVideos(query) {
+	$.getJSON(query, function(json) {
+		console.log(json);
+	});	
+}
+
+handleSearchFormSubmission();
