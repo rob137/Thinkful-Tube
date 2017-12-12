@@ -1,6 +1,5 @@
 .hidden {
 	visibility: hidden;
-	transition: hidden 2s;
 }
 
 .lightbox-shade:before{
@@ -10,13 +9,13 @@
   height: 120%;
   margin-top: -10%;
   left:0;
-  z-index:-1;s
+  z-index:-1;
 }
 
 .lightbox-on:before {
-  transition: black 3s;
 	opacity: 0.9;	
   background: black;
+  z-index:0;
 }
 
 .lightbox-parent {
@@ -54,4 +53,12 @@
 
 .opaque {
 	opacity: 0.1;
+}
+
+.next-previous-button {
+	width: 100px;
+}
+
+.next-button { 
+	margin-left: 20px; 
 }
