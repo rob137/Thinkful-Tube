@@ -8,6 +8,10 @@ function handleSearchFormSubmission() {
 		//Get the user's query and use it to create a YouTube API link for json request
 		const queryWithSearchTerms = prepareQuery();
 		fetchJsonAndRenderHTML(queryWithSearchTerms);
+
+		// Once the html has loaded, listen for clicks to the video thumbnails
+		// Clicks will cause an iframe to appear for the video with an accompanying
+		// 'lightbox' effect.
 		listenForThumbnailClick();
 	});
 }
@@ -22,42 +26,57 @@ function prepareQuery() {
 	return queryWithSearchTerms;
 }
 
-// This function gets the json and loads the results html into the div class 'js-search-results'. 
+// This function gets the json and loads the results html into the div class 'js-search-results'.
+// The function is called when EITHER the user submits the search form OR the user clicks the 
+// next/previous buttons 
 function fetchJsonAndRenderHTML(query) {
 	console.log('fetchJsonAndRenderHTML() ran.');
 	$.getJSON(query, function(json) {
+
+		// Display the search results html...
 		generateResultsHtml(json, query);
+
+		// Display the html buttons to navigate back/forward through search results
 		generateNextPreviousButtons(json, query);
-		// Load the new html into the empty .js-search-results div!
+
 	});
 }
 
+// Creates the video search results HTML and loads it to the page
 function generateResultsHtml(json, query) {
 	console.log('generateResultsHtml() ran.');
 	let resultsHtml = '';
 	for (let item in json.items) {
+		
 		// For H2 elements
 		const videoTitle = json.items[item].snippet.title;
+		
 		// For accompanying img elements
 		const videoThumbnail = json.items[item].snippet.thumbnails.medium.url; 
-		// Gets the unique identifier for the YouTube video.  Can be 
-		// used for all sorts of things (see next comment).
-		const videoId = json.items[item].id.videoId;
-		// Video channel for link to display beneath video
-		const channelId = json.items[item].snippet.channelId;
-		// 
 		
+		// Gets the unique identifier for the YouTube video. Used to create video's URL.
+		const videoId = json.items[item].id.videoId;
 		let videoUrl = 'https://www.youtube.com/watch/' + videoId;
+
+		// Video channel link - will be displayed beneath video
+		const channelId = json.items[item].snippet.channelId;
+		
 		resultsHtml+= `<h3>${videoTitle}</h3>
 				<img class="thumbnail" id="${videoId}" src="${videoThumbnail}"></img>
 				<p class="channel-text">Click <a href="https://www.youtube.com/channel/${channelId}">here</a> to see this video's channel<br><br>`;
 	};
+	// load the results html!
 	$(".js-search-results").html(resultsHtml);	
 }
 
+// This function called by fetchJsonAndRenderHTML() after generateResultsHtml() is completed.
+// This function creates the next/previous buttons and also calls listenForNextOrPreviousClick().
 function generateNextPreviousButtons(json, query) {
 	console.log('generateNextPreviousButtons() ran.');
 	let nextPreviousButtonsHtml = ''; 
+
+	// We don't want a 'previous' button on the very first page, so this 
+	// if statement ensures that the previous button appears by exception.
 	if (json.prevPageToken) {
 		nextPreviousButtonsHtml += `<button class="next-previous-button previous-button">Previous</button>`
 	}; 
@@ -65,21 +84,33 @@ function generateNextPreviousButtons(json, query) {
 	
 	$('.js-next-previous').html(nextPreviousButtonsHtml);
 
+	// See next function comments
 	listenForNextOrPreviousClick(json, query);
 }
 
+// Event listener for a single click on either the 'next' or 'previous' buttons.
 function listenForNextOrPreviousClick(json, query) {
 	console.log('listenForNextOrPreviousClick() ran.');
 	$('.js-next-previous').one('click', '.next-previous-button', function(event) {
 		event.stopPropagation();
+
+		// This if statement removes previous next/previous queries before adding any new ones.
+		// This prevents the youtube api query url from breaking when the user makes 2+ clicks 
+		// on the next/previous buttons.
 		if (query.includes('&pageToken=')) {
 			query = query.split("&pageToken=")[0];
 		}
+
+		// Either the user clicks previous, or they click next.  
+		// So, this if/else loads the appropriate page token depending on whether
+		// the user clicks 'previous'.
 		if ($(event.target).hasClass('previous-button')) {
 			query += '&pageToken=' + json.prevPageToken;
 		} else {
 			query += '&pageToken=' + json.nextPageToken;
 		}
+
+		// Back around the page generation loop!
 		fetchJsonAndRenderHTML(query);
 	});
 }
