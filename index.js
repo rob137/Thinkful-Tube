@@ -65,26 +65,24 @@ function generateNextPreviousButtons(json, query) {
 	
 	$('.js-next-previous').html(nextPreviousButtonsHtml);
 
-	listenForNextOrPreviousClick(json);
+	listenForNextOrPreviousClick(json, query);
 }
 
 function listenForNextOrPreviousClick(json, query) {
 	console.log('listenForNextOrPreviousClick() ran.');
-	$('.next-button').click(event, function(event) {
+	$('.js-next-previous').one('click', '.next-previous-button', function(event) {
 		event.stopPropagation();
-		const nextPageQuery = '&pageToken=' + json.nextPageToken;
-		query += nextPageQuery;
+		if (query.includes('&pageToken=')) {
+			query = query.split("&pageToken=")[0];
+		}
+		if ($(event.target).hasClass('previous-button')) {
+			query += '&pageToken=' + json.prevPageToken;
+		} else {
+			query += '&pageToken=' + json.nextPageToken;
+		}
 		fetchJsonAndRenderHTML(query);
 	});
 }
-
-
-
-
-
-
-
-
 
 // Listen out for clicks on thumbnails.  This will be the user prompt to 
 // display 'lightbox' embedded videos.
