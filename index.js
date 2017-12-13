@@ -11,7 +11,7 @@ function handleSearchFormSubmission() {
 
 		// Once the html has loaded, listen for clicks to the video thumbnails
 		// Clicks will cause an iframe to appear for the video with an accompanying
-		// 'lightbox' effect.
+		// 'lightbox' effect. 
 		listenForThumbnailClick();
 	});
 }
