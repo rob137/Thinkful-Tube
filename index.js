@@ -6,7 +6,7 @@ function handleSearchFormSubmission() {
 	$("form").submit(event, function(event) {
 		event.preventDefault();
 		//Get the user's query and use it to create a YouTube API link for json request
-		const queryWithSearchTerms = prepareQuery();
+		let queryWithSearchTerms = prepareQuery();
 		fetchJsonAndRenderHTML(queryWithSearchTerms);
 
 		// Once the html has loaded, listen for clicks to the video thumbnails
