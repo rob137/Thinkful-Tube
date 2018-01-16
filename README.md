@@ -1,2 +1,2 @@
 # Thinkful-Tube
-API exercise on Thinkful's Flex Web Development Course
+Experimenting with YouTube's API and custom lightboxes (CSS)
